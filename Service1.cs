@@ -11,7 +11,7 @@ namespace ServiceReservasi
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
     public class Service1 : IService1
     {
-        string constring = "Data Source=DESKTOP-SU3D3TD;Initial Catalog=WCFTest;Persist Security Info=True; User ID=sa;Password=goldensilk2020";
+        string constring = "Data Source=DESKTOP-SU3D3TD;Initial Catalog=WCFReservasi;Persist Security Info=True;User ID=sa;Password=goldensilk2020";
         SqlConnection connection;
         SqlCommand command; // Untuk mengkoneksikan database ke Visual Studio
 
@@ -72,6 +72,15 @@ namespace ServiceReservasi
                 connection.Open();
                 command.ExecuteNonQuery();
                 connection.Close();
+
+                string sql2 = "update into dbo.Lokasi set Kuota = Kuota - " + JumlahPemesanan + " where ID_lokasi = '" + IDLokasi + "' ";
+                // Fungsi koneksi ke database
+                connection = new SqlConnection(constring);
+                command = new SqlCommand(sql2, connection);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+
                 a = "sukses";
             }
             catch (Exception es)
@@ -81,14 +90,48 @@ namespace ServiceReservasi
             return a;
         }
 
-        public string editPemesanan(string IDPemesanan, string NamaCustomer)
+        public string editPemesanan(string IDPemesanan, string NamaCustomer, string NoTelpon)
         {
-            throw new NotImplementedException();
+            string a = "gagal";
+            try
+            {
+                string sql = "update dbo.Pemesanan set Nama_customer = '" + NamaCustomer + "', No_telpon = '" + NoTelpon + "'" + " where ID_reservasi = '" + IDPemesanan + "' ";
+                // Fungsi koneksi ke database
+                connection = new SqlConnection(constring);
+                command = new SqlCommand(sql, connection);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+
+                a = "sukses";
+            }
+            catch (Exception es)
+            {
+                Console.WriteLine(es);
+            }
+            return a;
         }
 
         public string deletePemesanan(string IDPemesanan)
         {
-            throw new NotImplementedException();
+            string a = "gagal";
+            try
+            {
+                string sql = "delete dbo.Pemesanan where ID_reservasi = '" + IDPemesanan + "'";
+                // Fungsi koneksi ke database
+                connection = new SqlConnection(constring);
+                command = new SqlCommand(sql, connection);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+
+                a = "sukses";
+            }
+            catch (Exception es)
+            {
+                Console.WriteLine(es);
+            }
+            return a;
         }
 
         public List<CekLokasi> ReviewLokasi()
@@ -98,7 +141,43 @@ namespace ServiceReservasi
 
         public List<Pemesanan> Pemesanan()
         {
-            throw new NotImplementedException();
+            List<Pemesanan> pemesanans = new List<Pemesanan>();
+            try
+            {
+                string sql = " select ID_reservasi, Nama_customer, No_telpon, " +
+                    "Jumlah_pemesanan, Nama_Lokasi from dbo.Pemesanan p join dbo.Lokasi l on p.ID_lokasi = l.ID_lokasi";
+                // Fungsi koneksi ke database
+                connection = new SqlConnection(constring);
+                // Proses execute query
+                command = new SqlCommand(sql, connection);
+                // Membuka koneksi
+                connection.Open();
+                // Menampilkan data query
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    /* nama class */
+
+                    // Deklarasi data, mengambil satu per satu dari database
+                    Pemesanan data = new Pemesanan();
+                    // Bentuk array
+                    // Index berupa 0, ada di kolom ke berapa di string sql diatas
+                    data.IDPemesanan = reader.GetString(0);
+                    data.NamaCustomer = reader.GetString(1);
+                    data.NoTelpon = reader.GetString(2);
+                    data.JumlahPemesanan = reader.GetInt32(3);
+                    data.Lokasi = reader.GetString(4);
+                    // Mengumpulkan data yang awalnya dari array
+                    pemesanans.Add(data);
+                }
+                // Untuk menutup akses ke database
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            return pemesanans;
         }
 
         //        public CompositeType GetDataUsingDataContract(CompositeType composite)
