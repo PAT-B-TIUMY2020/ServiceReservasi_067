@@ -1,7 +1,6 @@
 D:\Visual Studio 2017\Projects\ServiceReservasi\bin\Debug\ServiceReservasi.dll.config
 D:\Visual Studio 2017\Projects\ServiceReservasi\bin\Debug\ServiceReservasi.dll
 D:\Visual Studio 2017\Projects\ServiceReservasi\bin\Debug\ServiceReservasi.pdb
-D:\Visual Studio 2017\Projects\ServiceReservasi\obj\Debug\ServiceReservasi.csprojAssemblyReference.cache
 D:\Visual Studio 2017\Projects\ServiceReservasi\obj\Debug\ServiceReservasi.csproj.CoreCompileInputs.cache
 D:\Visual Studio 2017\Projects\ServiceReservasi\obj\Debug\ServiceReservasi.dll
 D:\Visual Studio 2017\Projects\ServiceReservasi\obj\Debug\ServiceReservasi.pdb
